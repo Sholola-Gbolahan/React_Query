@@ -1,22 +1,24 @@
-//1. import useQuery from react-query
 import { useQuery } from "@tanstack/react-query"
 import SingleItem from "./SingleItem"
 import customFetch from "./utils"
 
-const Items = ({ items }) => {
-  // 2. setup an instance to store return data
-  //3. useQuery need queryKey and queryFn
-  const result = useQuery({
-    // 4.  The unique key you provide is used internally for refetching, caching, and sharing your queries throughout your application.
+const Items = () => {
+  // 1. destructuring to get only required resourses needed
+  const { isLoading, data } = useQuery({
     queryKey: ["task"],
-    //5. A query function can be literally any function that returns a promise. The promise that is returned should either resolve the data or throw an error.
     queryFn: () => customFetch.get("/"),
   })
 
-  console.log(result)
+  if (isLoading) {
+    return <p style={{ marginTop: " 1rem" }}>Loading......</p>
+  }
+  //2. Getting taskList Array data from the query Data
+  const taskList = data.data.taskList
+
   return (
     <div className="items">
-      {items.map((item) => {
+      {/* 3.  Accessing Data  */}
+      {taskList.map((item) => {
         return <SingleItem key={item.id} item={item} />
       })}
     </div>
