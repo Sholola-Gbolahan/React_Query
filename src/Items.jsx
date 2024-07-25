@@ -6,7 +6,7 @@ const Items = () => {
   // 1. getting error resource to handle error
   const { isLoading, data, isError, error } = useQuery({
     queryKey: ["task"],
-    queryFn: () => customFetch.get("/somththth"),
+    queryFn: () => customFetch.get("/"),
   })
 
   if (isLoading) {
