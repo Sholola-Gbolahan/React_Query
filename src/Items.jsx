@@ -3,21 +3,25 @@ import SingleItem from "./SingleItem"
 import customFetch from "./utils"
 
 const Items = () => {
-  // 1. destructuring to get only required resourses needed
-  const { isLoading, data } = useQuery({
+  // 1. getting error resource to handle error
+  const { isLoading, data, isError, error } = useQuery({
     queryKey: ["task"],
-    queryFn: () => customFetch.get("/"),
+    queryFn: () => customFetch.get("/somththth"),
   })
 
   if (isLoading) {
     return <p style={{ marginTop: " 1rem" }}>Loading......</p>
   }
-  //2. Getting taskList Array data from the query Data
+
+  if (isError) {
+    // 2. getting error message from axios error and display using the error properties from react-query
+    return <p style={{ marginTop: " 1rem" }}>{error.message}</p>
+  }
+
   const taskList = data.data.taskList
 
   return (
     <div className="items">
-      {/* 3.  Accessing Data  */}
       {taskList.map((item) => {
         return <SingleItem key={item.id} item={item} />
       })}
