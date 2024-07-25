@@ -15,7 +15,7 @@ const App = () => {
     <section className='section-center'>
       <ToastContainer position='top-center' />
       <Form />
-      <Items items={items} />
+      <Items />
     </section>
   );
 };

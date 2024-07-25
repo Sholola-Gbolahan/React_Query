@@ -1,27 +1,43 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import customFetch from "./utils"
+
 const SingleItem = ({ item }) => {
+  const queryClient = useQueryClient()
+  const { mutate: editTask } = useMutation({
+    mutationFn: (checkedValue) =>
+      customFetch.patch(`/${item.id}`, { isDone: checkedValue }),
+    // 1. Getting task update on edit success
+    onSuccess: () => {
+      // This generated updated list immediately on change success
+      queryClient.invalidateQueries({ queryKey: "task" })
+    },
+  })
+
   return (
-    <div className='single-item'>
+    <div className="single-item">
       <input
-        type='checkbox'
+        type="checkbox"
         checked={item.isDone}
-        onChange={() => console.log('edit task')}
+        onChange={() => {
+          editTask(!item.isDone)
+        }}
       />
       <p
         style={{
-          textTransform: 'capitalize',
-          textDecoration: item.isDone && 'line-through',
+          textTransform: "capitalize",
+          textDecoration: item.isDone && "line-through",
         }}
       >
         {item.title}
       </p>
       <button
-        className='btn remove-btn'
-        type='button'
-        onClick={() => console.log('delete task')}
+        className="btn remove-btn"
+        type="button"
+        onClick={() => console.log("delete task")}
       >
         delete
       </button>
     </div>
-  );
-};
-export default SingleItem;
+  )
+}
+export default SingleItem

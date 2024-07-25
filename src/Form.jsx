@@ -1,8 +1,9 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import customFetch from "./utils"
 
 const Form = () => {
+  const queryClient = useQueryClient()
   const [newItemName, setNewItemName] = useState("")
   // 1. useMutation hook is used when we need to create and delete from server
   //2. involking the mutate function in order to communicate with the server
@@ -15,6 +16,7 @@ const Form = () => {
   } = useMutation({
     //.6 Argument to accept value when function is called
     mutationFn: (taskTitle) => customFetch.post("/", { title: taskTitle }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: "task" }),
   })
 
   const handleSubmit = (e) => {
